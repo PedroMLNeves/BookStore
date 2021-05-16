@@ -1,6 +1,7 @@
 package com.example.bookstore.ViewModel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -28,5 +29,9 @@ public class BookViewModel extends AndroidViewModel {
 
     public LiveData<VolumesResponse> getVolumesResponseLiveData() {
         return volumesResponseLiveData;
+    }
+
+    public int changeList(Context context){
+        return bookRepository.changeList(context);
     }
 }

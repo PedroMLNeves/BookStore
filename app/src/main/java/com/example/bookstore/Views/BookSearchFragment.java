@@ -1,5 +1,6 @@
 package com.example.bookstore.Views;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,12 +32,16 @@ public class BookSearchFragment extends Fragment {
     private Button searchButton;
     private ImageView Favourite;
 
+    private Context context;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         adapter =  new BookAdapter();
+
+        context = this.getActivity();
 
         viewModel = ViewModelProviders.of(this).get(BookViewModel.class);
         viewModel.init();
@@ -73,7 +79,7 @@ public class BookSearchFragment extends Fragment {
         Favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeList();
+                Favourite.setColorFilter(getResources().getColor(changeList(context)));
             }
         });
 
@@ -84,7 +90,7 @@ public class BookSearchFragment extends Fragment {
 
         viewModel.searchVolumes(keyword,"10","0");
     }
-    public void changeList(){
-
+    public int changeList(Context context){
+        return viewModel.changeList(context);
     }
 }

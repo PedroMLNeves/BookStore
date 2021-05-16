@@ -1,6 +1,7 @@
 package com.example.bookstore.adapters;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         if (volume.getVolumeInfo().getImageLinks() != null) {
             Picasso.get().load(volume.getVolumeInfo().getImageLinks().getThumbnail()
                     .replace("http://", "https://")).into(holder.bookIV);
+        }else{
+            holder.bookIV.setImageDrawable(null);
         }
 
         if (volume.getVolumeInfo().getAuthors() != null) {

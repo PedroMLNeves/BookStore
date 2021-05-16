@@ -14,4 +14,8 @@ public class VolumesResponse {
     public List<Volume> getItems() {
         return items;
     }
+
+    public void setItems(List<Volume> items) {
+        this.items = items;
+    }
 }
