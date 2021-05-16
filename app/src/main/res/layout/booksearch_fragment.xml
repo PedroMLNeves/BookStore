@@ -27,7 +27,8 @@
             android:layout_height="45dp"
             android:layout_margin="4dp"
             android:layout_weight="1"
-            android:text="Search" />
+            android:text="Search"
+            android:textSize="9sp" />
 
         <ImageView
             android:id="@+id/idBtnFavouriteList"

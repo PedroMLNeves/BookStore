@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,8 +63,19 @@ public class BookSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.booksearch_fragment, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.idRVBooks);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager =  new LinearLayoutManager(getContext());
+
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            //int initialY = 0;
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                performSearchExtra(linearLayoutManager);
+            }
+
+        });
 
         keywordEditText = view.findViewById(R.id.idEdtSearchBooks);
         searchButton = view.findViewById(R.id.idBtnSearch);
@@ -85,11 +97,19 @@ public class BookSearchFragment extends Fragment {
 
         return view;
     }
-    public void performSearch() {//TODO Change This
+    //Call method that performs the request for books
+    public void performSearch() {
         String keyword = keywordEditText.getEditableText().toString();
-
         viewModel.searchVolumes(keyword,"10","0");
     }
+
+    //Call method that performs the extra request when user scrolls through the list
+    public void performSearchExtra(LinearLayoutManager linearLayoutManager) {
+        String keyword = keywordEditText.getEditableText().toString();
+        viewModel.performSearchExtra(keyword, linearLayoutManager);
+    }
+
+    //Call method that change the list from the list of books to the list of favourite books and vice versa
     public int changeList(Context context){
         return viewModel.changeList(context);
     }

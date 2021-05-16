@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.bookstore.Model.Volume;
 import com.example.bookstore.R;
@@ -45,6 +46,7 @@ public class BookRepository {
                 .create(BookApi.class);
     }
 
+    //performs the initial request that will return 10 results
     public void searchVolumes(String query, String maxResults, String startIndex) {
         bookApi.searchVolumes(query, maxResults, startIndex)
                 .enqueue(new Callback<VolumesResponse>() {
@@ -62,11 +64,46 @@ public class BookRepository {
                     }
                 });
     }
+    private boolean loadingData = false;
+
+    //Makes extra request when the users scrolls through the list. Each request returns 10 extra books
+    public void performSearchExtra(String query, LinearLayoutManager linearLayoutManager) {
+
+        int currentMaxIndex = volumesResponseMutableLiveData.getValue().getItems().size();
+        List<Volume> allBooks = volumesResponseMutableLiveData.getValue().getItems();
+        VolumesResponse volumesResponse = new VolumesResponse();
+
+        if(linearLayoutManager.findLastVisibleItemPosition() == currentMaxIndex - 7 && !loadingData){
+            loadingData = true;
+            bookApi.searchVolumes(query, "" + 10, "" + currentMaxIndex)
+                    .enqueue(new Callback<VolumesResponse>() {
+                        @Override
+                        public void onResponse(Call<VolumesResponse> call, Response<VolumesResponse> response) {
+                            if (response.body() != null && response.body().getItems()!= null) {
+                                Log.d("BookRepo","" + allBooks.size());
+                                allBooks.addAll(response.body().getItems());
+                                volumesResponse.setItems(allBooks);
+                                volumesResponseMutableLiveData.postValue(volumesResponse);
+                                loadingData = false;
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<VolumesResponse> call, Throwable t) {
+                            volumesResponseMutableLiveData.postValue(null);
+                        }
+                    });
+        }
+
+
+    }
 
     public LiveData<VolumesResponse> getVolumesResponseLiveData() {
         return volumesResponseMutableLiveData;
     }
 
+    //Returns the color yellow if the user favourited a book
+    //Returns the color black if the used has never favourited or if he unfavourited the book
     public int getFavouriteStarColour(Context context, String id) {
 
         preferences = context.getSharedPreferences("BookStore", Context.MODE_PRIVATE);
@@ -84,6 +121,7 @@ public class BookRepository {
         }
     }
 
+    //changes from favourited to unfavourited and vice versa and returns the corresponding colour
     public int clickFavourite(Context context, String id) {
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -104,6 +142,7 @@ public class BookRepository {
     private List<Volume> allBooks;
     private boolean showingFavourites = false;
 
+    //Makes the change from the list of all books to the list of favourited books and vice versa
     public int changeList(Context context){
         if(!showingFavourites){
             preferences = context.getSharedPreferences("BookStore", Context.MODE_PRIVATE);
