@@ -17,6 +17,10 @@ public class Volume {
     @Expose
     VolumeInfo volumeInfo;
 
+    @SerializedName("saleInfo")
+    @Expose
+    private VolumeSaleInfo saleInfo;
+
     public String getId() {
         return id;
     }
@@ -27,5 +31,9 @@ public class Volume {
 
     public VolumeInfo getVolumeInfo() {
         return volumeInfo;
+    }
+
+    public VolumeSaleInfo getSaleInfo() {
+        return saleInfo;
     }
 }

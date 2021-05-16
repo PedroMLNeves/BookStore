@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ public class BookSearchFragment extends Fragment {
 
     private EditText keywordEditText;
     private Button searchButton;
+    private ImageView Favourite;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,11 +61,19 @@ public class BookSearchFragment extends Fragment {
 
         keywordEditText = view.findViewById(R.id.idEdtSearchBooks);
         searchButton = view.findViewById(R.id.idBtnSearch);
+        Favourite = view.findViewById(R.id.idBtnFavouriteList);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 performSearch();
+            }
+        });
+
+        Favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeList();
             }
         });
 
@@ -74,5 +84,7 @@ public class BookSearchFragment extends Fragment {
 
         viewModel.searchVolumes(keyword,"10","0");
     }
+    public void changeList(){
 
+    }
 }

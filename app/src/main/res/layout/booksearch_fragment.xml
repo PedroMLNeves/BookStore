@@ -30,7 +30,7 @@
             android:text="Search" />
 
         <ImageView
-            android:id="@+id/idBtnFavoriteList"
+            android:id="@+id/idBtnFavouriteList"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_margin="4dp"

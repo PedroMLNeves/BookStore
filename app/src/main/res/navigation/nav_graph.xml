@@ -8,5 +8,38 @@
         android:id="@+id/bookSearchFragment"
         android:name="com.example.bookstore.Views.BookSearchFragment"
         android:label="booksearch_fragment"
-        tools:layout="@layout/booksearch_fragment"/>
+        tools:layout="@layout/booksearch_fragment">
+        <action
+            android:id="@+id/action_bookSearchFragment_to_bookDetailsFragment2"
+            app:destination="@id/bookDetailsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailsFragment2"
+        android:name="com.example.bookstore.Views.BookDetailsFragment"
+        android:label="BookDetailsFragment" >
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="authors"
+            app:argType="string"
+            android:defaultValue="Authors not avaliable" />
+        <argument
+            android:name="description"
+            app:argType="string"
+            android:defaultValue="Description not avaliable" />
+        <argument
+            android:name="buylink"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="id"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="thumbnail"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
 </navigation>

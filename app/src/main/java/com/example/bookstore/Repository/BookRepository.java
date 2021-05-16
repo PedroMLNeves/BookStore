@@ -1,10 +1,13 @@
 package com.example.bookstore.Repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.bookstore.R;
 import com.example.bookstore.apis.BookApi;
 import com.example.bookstore.Model.VolumesResponse;
 
@@ -19,6 +22,8 @@ public class BookRepository {
 
     private BookApi bookApi;
     private MutableLiveData<VolumesResponse> volumesResponseMutableLiveData;
+
+    boolean nextClickFavourite = true;
 
     public BookRepository(){
         volumesResponseMutableLiveData = new MutableLiveData<>();
@@ -54,5 +59,39 @@ public class BookRepository {
 
     public LiveData<VolumesResponse> getVolumesResponseLiveData() {
         return volumesResponseMutableLiveData;
+    }
+
+    public int getFavouriteStarColour(Context context, String id) {
+
+        SharedPreferences preferences = context.getSharedPreferences("BookStore", Context.MODE_PRIVATE);
+
+        if(!preferences.contains("Book-" + id)){
+            return R.color.black;
+        }else{
+            if(preferences.getBoolean("Book-" + id, false)){
+                nextClickFavourite = false;
+                return R.color.yellow;
+            }else{
+                nextClickFavourite = true;
+                return R.color.black;
+            }
+        }
+    }
+
+    public int clickFavourite(Context context, String id) {
+        SharedPreferences preferences = context.getSharedPreferences("BookStore", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if(nextClickFavourite){
+            editor.putBoolean("Book-" + id, true);
+            nextClickFavourite = false;
+            editor.apply();
+            return R.color.yellow;
+        }else{
+            editor.putBoolean("Book-" + id, false);
+            nextClickFavourite = true;
+            editor.apply();
+            return R.color.black;
+        }
     }
 }

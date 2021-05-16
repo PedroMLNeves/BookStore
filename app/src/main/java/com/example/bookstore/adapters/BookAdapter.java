@@ -8,10 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookstore.Model.Volume;
 import com.example.bookstore.R;
+import com.example.bookstore.Views.BookSearchFragmentDirections;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,6 +45,35 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             //String authors = String.join(", ", volume.getVolumeInfo().getAuthors());
             holder.authorsTV.setText(authors);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BookSearchFragmentDirections.ActionBookSearchFragmentToBookDetailsFragment2 action = BookSearchFragmentDirections.actionBookSearchFragmentToBookDetailsFragment2();
+                action.setTitle(volume.getVolumeInfo().getTitle());
+                action.setId(volume.getId());
+
+
+                if (volume.getSaleInfo().getBuyLink() != null) {
+                    action.setBuylink(volume.getSaleInfo().getBuyLink());
+                }
+                if (volume.getVolumeInfo().getDescription() != null) {
+                    action.setDescription(volume.getVolumeInfo().getDescription());
+                }
+
+                if (volume.getVolumeInfo().getImageLinks() != null) {
+                    action.setThumbnail(volume.getVolumeInfo().getImageLinks().getThumbnail());
+                }
+                if (volume.getVolumeInfo().getAuthors() != null) {
+                    String authors = TextUtils.join(", ", volume.getVolumeInfo().getAuthors());
+                    action.setAuthors(authors);
+                }
+
+
+                //Navigation.findNavController(view).navigate(R.id.action_bookSearchFragment_to_bookDetailsFragment2);
+                Navigation.findNavController(view).navigate(action);
+            }
+        });
     }
 
     public void setItems(List<Volume> bookInfoList) {
